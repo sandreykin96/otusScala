@@ -7,9 +7,12 @@ dataFrame();
 
   def dataFrame(): Unit = {
 
+    /*
     var path_to_cars = "src/resources/data/cars.json"
     var path_to_cars_dates = "src/resources/data/cars_dates.json"
     var path_to_taxi_zones = "src/resources/data/taxi_zones.json"
+     */
+
     var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018/part-00004-5ca10efc-1651-4c8f-896a-3d7d3cc0e925-c000.snappy.parquet"
 
     val spark: SparkSession = SparkSession
@@ -20,34 +23,13 @@ dataFrame();
 
     import spark.implicits._
 
-    val cars = spark.read
-      .json(path_to_cars)
-      .as[Cars]
-      //.filter(_.Country != "Unspecified")
-      .map(Cars(_))
+    val trips = spark.read
+      .json(path_to_yellow_taxi)
+      .as[Trips]
+      .map(Trips(_))
 
-    /*val taxiZones = spark.read
-      .json(path_to_cars)
-      .as[Cars]
-      //.filter(_.Country != "Unspecified")
-      .map(Cars(_))*/
-
-    val taxiZones = spark.read
-      .json(path_to_taxi_zones)
-      .as[TaxiZones]
-      //.filter(_.Country != "Unspecified")
-      .map(TaxiZones(_))
-
+    trips.show(10)
 /*
-    val retail = spark.read
-      .json(path_to_retail)
-      .select(
-        $"CustomerID".cast(LongType),
-        $"Quantity".cast(IntegerType),
-        $"UnitPrice".cast(DoubleType)
-      )
-      .as[Retail]
-
     val customerRetail = cars
       .join(retail, Seq("CustomerId"))
       .withColumn("value", $"Quantity" * $"UnitPrice")
