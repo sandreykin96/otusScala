@@ -1,6 +1,6 @@
 package scala.scala4
 
-object Main extends App {
+object First extends App {
   val age : Int = 17
   val weight : Double = 53
   val name : String = "Alice"
