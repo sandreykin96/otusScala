@@ -1,18 +1,12 @@
 package scala.homework4.DataSet
 
 import org.apache.spark.sql._
+import org.apache.spark.sql.functions.{avg, count, mean, round}
 
 object Main extends App {
 dataFrame();
 
   def dataFrame(): Unit = {
-
-    /*
-    var path_to_cars = "src/resources/data/cars.json"
-    var path_to_cars_dates = "src/resources/data/cars_dates.json"
-    var path_to_taxi_zones = "src/resources/data/taxi_zones.json"
-     */
-
     var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018/part-00004-5ca10efc-1651-4c8f-896a-3d7d3cc0e925-c000.snappy.parquet"
 
     val spark: SparkSession = SparkSession
@@ -23,30 +17,24 @@ dataFrame();
 
     import spark.implicits._
 
-    val trips = spark.read
-      .json(path_to_yellow_taxi)
+    val trips = spark
+      .read.parquet(path_to_yellow_taxi)
       .as[Trips]
       .map(Trips(_))
 
     trips.show(10)
-/*
-    val customerRetail = cars
-      .join(retail, Seq("CustomerId"))
-      .withColumn("value", $"Quantity" * $"UnitPrice")
-      .groupBy("Country", "Birthdate")
-      .agg(min("value").as("min"), mean("value").as("mean"), max("value").as("max"))
-      .orderBy("Country", "Birthdate")
-      .as[CustomerRetail]
 
-    customerRetail.toJSON.write
-      .mode(SaveMode.Overwrite)
-      .text(path_to_result)
-*/
-    /*
-    customerRetail.write
-      .mode(SaveMode.Overwrite)
-      .json(args(2))
-     */
+    val tripsAvg = trips.groupBy("PULocationID")
+      .agg(
+        count("*").as("total_trips"),
+        functions.min("trip_distance").as("min_distance"),
+        functions.max("trip_distance").as("max_distance")
+          )
+      .as[AverageTrips];
+
+    tripsAvg.show()
+
+    tripsAvg.write.mode(SaveMode.Overwrite).format("parquet").saveAsTable("avgTrips")
 
     spark.stop()
   }
