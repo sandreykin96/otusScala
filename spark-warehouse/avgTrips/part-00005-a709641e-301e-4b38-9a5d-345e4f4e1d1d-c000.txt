@@ -1,0 +1,2 @@
+Hour: 17, Count: 16160
+Hour: 14, Count: 16082

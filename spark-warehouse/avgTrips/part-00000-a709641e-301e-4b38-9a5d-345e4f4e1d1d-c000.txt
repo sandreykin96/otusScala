@@ -1,0 +1,2 @@
+Hour: 19, Count: 22121
+Hour: 20, Count: 21598

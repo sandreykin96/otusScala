@@ -1,4 +1,4 @@
-package scala.homework4.DataSet
+package scala.homework4
 
 case class Trips(
                  VendorID: BigInt,

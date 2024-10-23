@@ -3,6 +3,8 @@ package scala.homework4.DataSet
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions.{avg, count, mean, round}
 
+import scala.homework4.Trips
+
 object Main extends App {
 dataFrame();
 

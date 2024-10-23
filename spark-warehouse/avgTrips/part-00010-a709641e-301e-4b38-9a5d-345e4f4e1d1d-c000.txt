@@ -1,0 +1,2 @@
+Hour: 6, Count: 3133
+Hour: 3, Count: 2538
