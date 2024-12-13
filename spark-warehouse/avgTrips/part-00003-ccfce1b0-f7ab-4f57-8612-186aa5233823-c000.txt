@@ -1,2 +1,0 @@
-Hour: 18, Count: 18664
-Hour: 16, Count: 17843

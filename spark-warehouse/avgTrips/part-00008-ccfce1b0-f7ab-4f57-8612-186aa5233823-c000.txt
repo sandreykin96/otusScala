@@ -1,2 +1,0 @@
-Hour: 0, Count: 14652
-Hour: 7, Count: 8600

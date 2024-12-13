@@ -1,2 +1,0 @@
-Hour: 23, Count: 19528
-Hour: 9, Count: 18867
