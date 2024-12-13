@@ -12,7 +12,7 @@ object Main extends App {
   rdd();
 
   def rdd(): Unit = {
-    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018/part-00004-5ca10efc-1651-4c8f-896a-3d7d3cc0e925-c000.snappy.parquet"
+    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018"
 
     val spark: SparkSession = SparkSession
       .builder()
@@ -31,18 +31,15 @@ object Main extends App {
 
     val times = tripsRdd.map( x => format.parse(x.tpep_pickup_datetime).getHours)
 
-    val countedAndOrdered = times.groupBy(identity)
-                                  .map{ case (element, occurrences) => (element, occurrences.size) }
-                                  .sortBy(_._2, false).collect
+    val result = times
+      .groupBy(x => x)
+      .map(s => Tuple2(s._1, s._2.size))
+      .sortBy(_._2, ascending = false)
+      .map(x => s"${x._1} ${x._2.toString}")
+      .cache()
 
-
-    countedAndOrdered.map { case (element, count) => println(s"Hour: $element, Count: $count" )}
-
-    val asString = countedAndOrdered.map{ case (element, count) => (s"Hour: $element, Count: $count" )}
-    asString.map(_=> println())
-
-    val df = spark.createDataset(asString)
-    df.write.mode(SaveMode.Overwrite).text("spark-warehouse/avgTrips")
+    result.saveAsTextFile("src/resources/result/times")
+    result.foreach(println)
 
     spark.stop()
   }

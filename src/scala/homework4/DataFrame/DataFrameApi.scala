@@ -8,10 +8,12 @@ object DataFrameApi extends SparkSessionWrapper {
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018/part-00004-5ca10efc-1651-4c8f-896a-3d7d3cc0e925-c000.snappy.parquet"
+    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018"
     var path_to_taxi_zones = "src/resources/data/taxi_zones.csv"
 
-    val yellowTaxiDataFrame: DataFrame = spark.read.parquet (path_to_yellow_taxi);
+    val yellowTaxiDataFrame: DataFrame = spark.read
+      .format("parquet")
+      .load(path_to_yellow_taxi)
 
     yellowTaxiDataFrame.show (10)
     yellowTaxiDataFrame.orderBy($"total_amount".desc).show (10)
@@ -40,7 +42,7 @@ object DataFrameApi extends SparkSessionWrapper {
       .orderBy($"ordersCount".desc)
     groupedByZone.show()
 
-    groupedByZone.write.mode(SaveMode.Overwrite).format("parquet").saveAsTable("theMostPopularZones")
+    groupedByZone.write.mode(SaveMode.Overwrite).format("parquet").save("src/resources/result/theMostPopularZones")
   }
 
   private val customSchema = StructType(

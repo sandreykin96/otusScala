@@ -12,9 +12,6 @@ lazy val circeDependencies = Seq(
 
 lazy val sparkDependencies = Seq(
   "org.apache.spark"         %% "spark-sql"            % sparkVersion,
-  "org.apache.spark"         %% "spark-streaming"      % sparkVersion,
-  "org.apache.spark"         %% "spark-sql-kafka-0-10" % "3.2.0",
-  "org.apache.logging.log4j" % "log4j-core"            % "2.20.0",
   "io.netty"          % "netty-all"                   % "4.1.97.Final"
 )
 

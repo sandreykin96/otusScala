@@ -1,15 +1,14 @@
 package scala.homework4.DataSet
 
 import org.apache.spark.sql._
-import org.apache.spark.sql.functions.{avg, count, mean, round}
-
+import org.apache.spark.sql.functions._
 import scala.homework4.Trips
 
 object Main extends App {
 dataFrame();
 
   def dataFrame(): Unit = {
-    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018/part-00004-5ca10efc-1651-4c8f-896a-3d7d3cc0e925-c000.snappy.parquet"
+    var path_to_yellow_taxi = "src/resources/data/yellow_taxi_jan_25_2018"
 
     val spark: SparkSession = SparkSession
       .builder()
@@ -26,17 +25,18 @@ dataFrame();
 
     trips.show(10)
 
-    val tripsAvg = trips.groupBy("PULocationID")
+    val tripsAvg = trips.groupBy(date_format('tpep_pickup_datetime, "dd-MM-yyyy").as("date"))
       .agg(
-        count("*").as("total_trips"),
-        functions.min("trip_distance").as("min_distance"),
-        functions.max("trip_distance").as("max_distance")
-          )
-      .as[AverageTrips];
+        round(sum('trip_distance), 2).as("total_day_distance"),
+        round(mean('trip_distance), 2).as("mean_day_distance"),
+        round(max('trip_distance), 2).as("max_day_distance"),
+        round(min('trip_distance), 2).as("min_day_distance"),
+        round(stddev('trip_distance), 2).as("stddev_day_distance")
+      )
 
     tripsAvg.show()
 
-    tripsAvg.write.mode(SaveMode.Overwrite).format("parquet").saveAsTable("avgTrips")
+    tripsAvg.write.mode(SaveMode.Overwrite).format("parquet").save("src/resources/result/avgTrips")
 
     spark.stop()
   }

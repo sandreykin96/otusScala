@@ -1,5 +1,3 @@
 [debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/F:/projects/otusScala/project/"), "otusscala-build")...
-[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
-[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
-[debug] Done updating ProjectRef(uri("file:/F:/projects/otusScala/project/"), "otusscala-build")
+[debug] Updating ProjectRef(uri("file:/F:/projects/homeworks/otusScala/project/"), "otusscala-build")...
+[debug] Done updating ProjectRef(uri("file:/F:/projects/homeworks/otusScala/project/"), "otusscala-build")
